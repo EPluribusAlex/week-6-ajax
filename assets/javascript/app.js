@@ -39,31 +39,33 @@ $(document).ready(function() {
 
 		renderGiphs: function() {
 
-				let queryURL = O.baseURL + O.apiKey + "&q=" + $(this).attr("data-name").split(' ').join('+') + "&limit=10";
-				console.log(queryURL);
+			$("#gif_area").empty();			
 
-				$.ajax({
-					url: queryURL,
-					method: "GET"
-				}).then(function(response) {
+			let queryURL = O.baseURL + O.apiKey + "&q=" + $(this).attr("data-name").split(' ').join('+') + "&limit=10";
+			console.log(queryURL);
 
-					console.log(response);
+			$.ajax({
+				url: queryURL,
+				method: "GET"
+			}).then(function(response) {
 
-					let results = response.data;
+				console.log(response);
 
-					for(let i = 0; i < results.length; i++) {
+				let results = response.data;
 
-						let div = $("<div>").addClass("text-center pull-left"),
-								img = $("<img>").attr("src", results[i].images.fixed_width_still.url),
-								p = $("<p>").text("Rated: " + results[i].rating);
+				for(let i = 0; i < results.length; i++) {
 
-						div.append(img).append(p);
-						$("#gif_area").append(div);
+					let div = $("<div>").addClass("text-center pull-left"),
+							img = $("<img>").attr("src", results[i].images.fixed_width_still.url),
+							p = $("<p>").text("Rated: " + results[i].rating);
 
-					}
+					div.append(img).append(p);
+					$("#gif_area").append(div);
 
-				}).fail(function(err) {
-					throw err;
+				}
+
+			}).fail(function(err) {
+				throw err;
 				});
 
 		},
