@@ -16,6 +16,7 @@ $(document).ready(function() {
 			newTopics: []
 		},
 
+		// displays buttons for all stored topics
 		renderButtons: function() {
 
 			$("#button_field").empty();
@@ -37,6 +38,7 @@ $(document).ready(function() {
 
 		},
 
+		// renders 10 frozen gifs for selected topic button
 		renderGiphs: function() {
 
 			$("#gif_area").empty();			
@@ -56,7 +58,13 @@ $(document).ready(function() {
 				for(let i = 0; i < results.length; i++) {
 
 					let div = $("<div>").addClass("text-center pull-left"),
-							img = $("<img>").attr("src", results[i].images.fixed_width_still.url),
+							img = $("<img>").attr({
+								"src": results[i].images.fixed_width_still.url, 
+								"data-still": results[i].images.fixed_width_still.url, 
+								"data-animate": results[i].images.fixed_width.url, 
+								"class": "gif", 
+								"data-state": "still"
+								}),
 							p = $("<p>").text("Rated: " + results[i].rating);
 
 					div.append(img).append(p);
@@ -70,15 +78,34 @@ $(document).ready(function() {
 
 		},
 
+		// plays/pauses gif when selected
+		animateGif: function(x) {
+
+			console.log(x);
+
+			if (x.attr("data-state") === "still") {
+		    x.attr("src", x.attr("data-animate"));
+		    x.attr("data-state", "animate");
+		  } 
+		  else {
+		    x.attr("src", x.attr("data-still"));
+		    x.attr("data-state", "still");
+		   }
+
+		},
+
 		ready: function() {
 
 			O.renderButtons();
 
+			// when new topic is submitted, stores topic and re-renders buttons
 			$("#add_topic_button").on("click", function(event) {
 
 				event.preventDefault();
 
 				O.store.newTopics.push($("#topic_input").val().trim());
+
+				$("#topic_input").val(null);				
 
 				O.renderButtons();
 
@@ -86,9 +113,13 @@ $(document).ready(function() {
 
 			$(document).on("click", ".topic_button", O.renderGiphs);
 
+			$(document).on("click", ".gif", function() {
+				O.animateGif($(this));
+			});
+
 		}
 
-	}
+	};
 
 	O.ready();
 

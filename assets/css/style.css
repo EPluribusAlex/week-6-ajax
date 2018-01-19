@@ -6,3 +6,7 @@ h1 {
 	max-height: 600px;
 	overflow: scroll;
 }
+
+img {
+	margin: 10px;
+}
